@@ -1,82 +1,67 @@
 <?php
-
-/**
- * Function to query information based on 
- * a parameter: in this case, location.
- *
- */
-
-require "../config.php";
-require "../common.php";
-
-if (isset($_POST['submit'])) {
-  if (!hash_equals($_SESSION['csrf'], $_POST['csrf'])) die();
-
-  try  {
-    $connection = new PDO($dsn, $username, $password, $options);
-
-    $sql = "SELECT * 
-            FROM users
-            WHERE location = :location";
-
-    $location = $_POST['location'];
-    $statement = $connection->prepare($sql);
-    $statement->bindParam(':location', $location, PDO::PARAM_STR);
-    $statement->execute();
-
-    $result = $statement->fetchAll();
-  } catch(PDOException $error) {
-      echo $sql . "<br>" . $error->getMessage();
-  }
-}
+include("./dbconnect.php");
 ?>
+
 <?php require "templates/header.php"; ?>
-        
-<?php  
-if (isset($_POST['submit'])) {
-  if ($result && $statement->rowCount() > 0) { ?>
-    <h2>Results</h2>
 
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email Address</th>
-          <th>Age</th>
-          <th>Location</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-      <?php foreach ($result as $row) : ?>
-        <tr>
-          <td><?php echo escape($row["id"]); ?></td>
-          <td><?php echo escape($row["firstname"]); ?></td>
-          <td><?php echo escape($row["lastname"]); ?></td>
-          <td><?php echo escape($row["email"]); ?></td>
-          <td><?php echo escape($row["age"]); ?></td>
-          <td><?php echo escape($row["location"]); ?></td>
-          <td><?php echo escape($row["date"]); ?> </td>
-        </tr>
-      <?php endforeach; ?>
-      </tbody>
-    </table>
-    <?php } else { ?>
-      <blockquote>No results found for <?php echo escape($_POST['location']); ?>.</blockquote>
-    <?php } 
-} ?> 
+<a href="index.php" style="text-decoration: none; float: right; margin-right: 80px;">Back to home</a>
 
-<h2>Find user based on location</h2>
-
-<form method="post">
-  <input name="csrf" type="hidden" value="<?php echo escape($_SESSION['csrf']); ?>">
-  <label for="location">Location</label>
-  <input type="text" id="location" name="location">
-  <input type="submit" name="submit" value="View Results">
-</form>
-
-<a href="index.php">Back to home</a>
+<?php
+  
+  $query = "SELECT * FROM users";
+  $result = mysqli_query($conn,$query);
+  $rowcount = mysqli_num_rows($result);
+  $output = '
+  <center style="margin-top: 50px;"><table width="70%" style="text-align: center;">
+    <tr>
+      <th width="5%">No</th>
+      <th width="30%">First Name</th>
+      <th width="30%">Last Name</th>
+      <th width="5%">Age</th>
+      <th width="15%">Edit</th>
+      <th width="15%">Delete</th>
+    </tr>
+  ';
+  if($rowcount > 0)
+  {
+    $i = 0;
+    foreach($result as $row)
+    {
+      $output .= '
+      <tr>
+        <td width="5%">'.++$i.'</td>
+        <td width="30%">'
+          . '<span id="first_' . $row["id"] . '">' .$row["first_name"]. '</span>' .
+          '<input type="text" value="' . $row["first_name"] . '" id="firstname_' . $row["id"] . '" style="display: none;"/>' .
+        '</td>        
+        <td width="30%">'
+          . '<span id="last_' . $row["id"] . '">' .$row["last_name"]. '</span>' .
+          '<input type="text" value="' . $row["last_name"] . '" id="lastname_' . $row["id"] . '" style="display: none;"/>' .
+        '</td>
+        <td width="5%">'
+          . '<span id="age_' . $row["id"] . '">' .$row["age"]. '</span>' .
+          '<input type="number" step="1" min="0" max="200" value="' . $row["age"] . '" id="age1_' . $row["id"] . '" style="display: none;"/>' .
+        '</td>
+        <td width="15%">
+          <button type="button" name="edit" class="edit" id="edit_'.$row["id"].'" onClick="clickEdit(' . $row["id"] . ')">Edit</button>
+        </td>
+        <td width="15%">
+          <button type="button" name="delete" class="delete" id="'.$row["id"].'" onClick="clickDelete(' . $row["id"] . ')">Delete</button>
+        </td>
+      </tr>
+      ';
+    }
+  }
+  else
+  {
+    $output .= '
+    <tr>
+      <td colspan="4" align="center">Data not found</td>
+    </tr>
+    ';
+  }
+  $output .= '</table></center>';
+  echo $output;  
+?>
 
 <?php require "templates/footer.php"; ?>

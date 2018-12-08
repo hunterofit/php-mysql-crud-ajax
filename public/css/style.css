@@ -1,15 +1,125 @@
+body{
+	margin: 100px !important;
+
+}
 label {
 	display: block;
 	margin: 5px 0;
 }
 
-table {
+/* table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
 
-td,
 th {
-	padding: 5px;
+	padding: 8px;
 	border-bottom: 1px solid #aaa;
+	background-color: #2dca33;
+	color: white;
+	text-align: center;
+}
+
+td{
+	text-align: center;
+}
+
+table tr:nth-child(even) {
+    background-color: #eee;
+}
+table tr:nth-child(odd) {
+   background-color: #fff;
+} */
+
+.button {
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+	cursor: pointer;
+	background-color: #008CBA;	
+	/* margin-left: -700px !important; */
+}
+
+.autocomplete {
+	position: relative;
+	display: inline-block;
+  }
+
+.autocomplete-items div {
+	/* padding: 10px;
+	cursor: pointer; */
+	background-color: #fff !important; 
+	border-bottom: 1px solid #d4d4d4 !important; 
+  }
+
+#year_, #course_, #book_{
+	margin: auto;
+}
+
+input{
+	margin: auto;
+	font-size: 15px;
+}
+
+#table_ {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#table_ td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#table_ tr:nth-child(even){background-color: #f2f2f2;}
+
+#table_ tr:hover {background-color: #ddd;}
+
+#table_ th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+	color: white;
+}
+input, select, option
+{
+	line-height: 2 !important;
+}
+select
+{
+	height: 25px;
+}
+.filter-bar
+{
+	display: inline;
+	margin-right: 50px;
+	width: 150px;
+}
+button
+{
+	font-size: 20px;
+	padding: 6px 20px !important;
+	color: white;
+}
+.edit
+{
+	background-color: #008CBA;
+}
+.delete
+{
+	background-color: darkred;
+}
+.new
+{
+	background: darkgreen;
+}
+select{
+	width: 200px;
 }
